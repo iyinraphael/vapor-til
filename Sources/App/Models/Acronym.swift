@@ -1,5 +1,5 @@
 import Vapor
-import FluentSQLite
+import FluentPostgreSQL
 
 final class Acronym: Codable {
     var id: Int?
@@ -13,7 +13,7 @@ final class Acronym: Codable {
 }
 
 //Create ID for the data
-extension Acronym: SQLiteModel {}
+extension Acronym: PostgreSQLModel {}
 
 //To create your database schema or table
 extension Acronym: Migration {}
