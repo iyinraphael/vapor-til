@@ -22,7 +22,6 @@ final class AcronymController: RouteCollection {
     }
     
     private func getAllAcronyms(_ req: Request) throws -> Future<[Acronym]> {
-        
         return Acronym.query(on: req).all()
     }
     
