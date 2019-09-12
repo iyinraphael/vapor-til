@@ -3,13 +3,7 @@ import Vapor
 /// Register your application's routes here.
 public func routes(_ router: Router) throws {
     
-    router.post("api", "acronyms") { (req) -> Future<Acronym>  in
-        
-        //Returns a acronym object wants it's save
-        return try req.content
-            .decode(Acronym.self)
-            .flatMap(to: Acronym.self) { acronym in
-            return acronym.save(on: req)
-        }
-    }
+    let acronymController = AcronymController()
+    
+    try router.register(collection: acronymController)
 }
