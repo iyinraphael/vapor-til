@@ -21,3 +21,5 @@ extension Acronym: Migration {}
 //Allows conversion of model from different format  
 extension Acronym: Content {}
 
+extension Acronym: Parameter {}
+

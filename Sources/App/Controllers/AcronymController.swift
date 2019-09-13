@@ -9,9 +9,28 @@ final class AcronymController: RouteCollection {
         router.get("api", "all", use: getAllAcronyms)
         router.get("api", Int.parameter, use: getAcronymWithID)
         router.delete("api", Int.parameter, use: deleteAcronymAtID)
+        router.put("api", Acronym.parameter, use: updateAcronym)
 
     }
     
+    private func updateAcronym(_ req: Request) throws -> Future<Acronym> {
+        
+        let id = try req.parameters.next(Acronym.self)
+        
+        return  try flatMap(to: Acronym.self,
+                        id,
+                        req.content.decode(Acronym.self)) { acronym, updatedAcronym in
+                            
+                            acronym.short = updatedAcronym.short
+                            acronym.long = updatedAcronym.long
+                        
+                    return acronym.save(on: req)
+        
+        }
+                
+                
+    }
+   
     
     private func deleteAcronymAtID(_ req: Request) throws -> Future<HTTPResponseStatus> {
         
