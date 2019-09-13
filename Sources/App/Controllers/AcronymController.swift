@@ -1,4 +1,5 @@
 import Vapor
+import PostgreSQL
 
 final class AcronymController: RouteCollection {
     
@@ -6,6 +7,33 @@ final class AcronymController: RouteCollection {
         
         router.post("api", "acronyms", use: createAcronymHandler)
         router.get("api", "all", use: getAllAcronyms)
+        router.get("api", Int.parameter, use: getAcronymWithID)
+        router.delete("api", Int.parameter, use: deleteAcronymAtID)
+
+    }
+    
+    
+    private func deleteAcronymAtID(_ req: Request) throws -> Future<HTTPResponseStatus> {
+        
+        let id = try req.parameters.next(Int.self)
+        
+        return Acronym
+            .query(on: req)
+            .filter(\.id, .equal, id)
+            .first()
+            .unwrap(or: HTTPError(identifier: "com.LambdaSchool.API", reason: "There's no todo with that identifiers: \(id)"))
+            .delete(on: req)
+            .transform(to: HTTPResponseStatus.noContent)
+    }
+    
+    private func getAcronymWithID(_ req: Request) throws -> Future<Acronym> {
+        let id = try req.parameters.next(Int.self)
+        
+        return Acronym
+            .query(on: req)
+            .filter(\.id, .equal, id)
+            .first()
+            .unwrap(or: HTTPError(identifier: "com.LambdaSchool.API", reason: "There's no todo with that identifiers: \(id)"))
         
     }
     
